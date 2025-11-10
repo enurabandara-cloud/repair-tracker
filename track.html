@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Track Your Order</title>
+</head>
+<body>
+  <h1>Track Your Order</h1>
+  <input type="text" id="orderID" placeholder="Enter Order ID">
+  <button onclick="checkOrder()">Check Status</button>
+  <p id="status"></p>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+       apiKey: "AIzaSyCyBWuKREPhHPOEFVxUGszbpDdXKQGcdEg",
+  authDomain: "repairtrackersystem.firebaseapp.com",
+  projectId: "repairtrackersystem",
+  storageBucket: "repairtrackersystem.firebasestorage.app",
+  messagingSenderId: "181636666453",
+  appId: "1:181636666453:web:9fa73b02c4a6cbba7370dc"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    async function checkOrder() {
+      const orderID = document.getElementById("orderID").value;
+      const docRef = db.collection("orders").doc(orderID);
+      const doc = await docRef.get();
+      if(doc.exists){
+        document.getElementById("status").innerText = "Current Status: " + doc.data().status;
+      } else {
+        document.getElementById("status").innerText = "Order not found.";
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inventory Price Check</title>
+</head>
+<body>
+  <h1>Inventory Price Check</h1>
+  <input type="text" id="itemName" placeholder="Enter item name">
+  <button onclick="checkPrice()">Check Price</button>
+  <p id="price"></p>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCyBWuKREPhHPOEFVxUGszbpDdXKQGcdEg",
+  authDomain: "repairtrackersystem.firebaseapp.com",
+  projectId: "repairtrackersystem",
+  storageBucket: "repairtrackersystem.firebasestorage.app",
+  messagingSenderId: "181636666453",
+  appId: "1:181636666453:web:9fa73b02c4a6cbba7370dc"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    async function checkPrice() {
+      const itemName = document.getElementById("itemName").value.toLowerCase();
+      const snapshot = await db.collection("inventory").where("itemName", "==", itemName).get();
+      if(!snapshot.empty){
+        const item = snapshot.docs[0].data();
+        document.getElementById("price").innerText = "Price: " + item.price + " | Quantity: " + item.quantity;
+      } else {
+        document.getElementById("price").innerText = "Item not found.";
+      }
+    }
+  </script>
+</body>
+</html>
